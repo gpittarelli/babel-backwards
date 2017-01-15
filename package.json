@@ -1,0 +1,48 @@
+{
+  "name": "babel-backwards",
+  "version": "0.0.1",
+  "description": "Upgrade ES5 to newer language features; lebab but with babel",
+  "main": "lib/cli.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "build": "npm run clean && babel src/ --out-dir lib/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "files": [
+    "lib",
+    "bin"
+  ],
+  "bin": {
+    "babel-backwards": "./bin/babel-backwards"
+  },
+  "keywords": [
+    "babel",
+    "es5",
+    "es6",
+    "es7",
+    "es2015",
+    "es2016",
+    "es2017",
+    "lebab",
+    "5to6"
+  ],
+  "author": "George Pittarelli",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "6.21.0",
+    "babel-polyfill": "6.20.0",
+    "babel-preset-stage-1": "6.16.0",
+    "babel-template": "6.16.0",
+    "recast": "0.11.16"
+  },
+  "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-preset-latest": "6.16.0",
+    "babel-preset-stage-3": "6.17.0",
+    "rimraf": "2.5.4"
+  }
+}
