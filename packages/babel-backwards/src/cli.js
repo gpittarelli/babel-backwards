@@ -32,7 +32,7 @@ const transforms = {
   }
 };
 
-export default function cli(argv) {
+export default function cli(argv: String[]) {
   const {
     args: [file='-'],
     transform: desiredTransforms

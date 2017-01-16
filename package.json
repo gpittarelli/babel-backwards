@@ -23,8 +23,14 @@
   "author": "George Pittarelli",
   "license": "MIT",
   "babel": {
-    "presets": ["latest", "stage-3"],
-    "plugins": ["add-module-exports"]
+    "presets": [
+      "latest",
+      "stage-3"
+    ],
+    "plugins": [
+      "add-module-exports",
+      "transform-flow-strip-types"
+    ]
   },
   "dependencies": {
     "babel-core": "6.21.0",
@@ -36,6 +42,7 @@
   "devDependencies": {
     "babel-cli": "6.18.0",
     "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-transform-flow-strip-types": "6.21.0",
     "babel-preset-latest": "6.16.0",
     "babel-preset-stage-3": "6.17.0",
     "lerna": "2.0.0-beta.32",
