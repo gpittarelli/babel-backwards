@@ -16,9 +16,13 @@ will run all of them).
 Why recreate lebab in the Babel ecosystem? A few reasons: (inspired by
 https://github.com/lebab/lebab/issues/138)
 
- - lebab has some annoying error handling and other annoyances, which babel
+ - babel already has really nice error handling and similar tooling
+   worked out, allowing the actual transforms to just be implemented
+   by themselves.
  - lebab is based on the espree JS parser, which doesn't support as
-   many features as ; so a
+   many features as babylon; so it doens't support the (admittedly
+   awkward case) of upgrading files that already use some experimental
+   features.
 
 Many thanks to [hzoo](https://github.com/hzoo) for making this
 possible (see https://github.com/lebab/lebab/issues/138)
