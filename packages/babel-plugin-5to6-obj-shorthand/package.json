@@ -1,0 +1,19 @@
+{
+  "name": "babel-plugin-5to6-obj-shorthand",
+  "version": "0.0.1",
+  "description": "Babel plugin to use object property shorthand when possible",
+  "main": "lib/index.js",
+  "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-plugin-5to6-obj-shorthand",
+  "engines": {
+    "node": ">=4"
+  },
+  "keywords": [
+    "babel",
+    "preset",
+    "es5",
+    "es6",
+    "shorthand"
+  ],
+  "author": "George Pittarelli",
+  "license": "MIT"
+}
