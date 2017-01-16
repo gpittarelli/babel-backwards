@@ -25,6 +25,8 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "6.21.0",
+    "babel-plugin-5to6-no-strict": "0.0.1",
+    "babel-plugin-5to6-obj-shorthand": "0.0.1",
     "babel-polyfill": "6.20.0",
     "babel-template": "6.16.0",
     "recast": "0.11.18"

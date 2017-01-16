@@ -3,9 +3,9 @@ import fs from 'fs';
 import readStdin from './readStdin';
 import recast from 'recast';
 import * as babel from 'babel-core';
-import objectShorthand from './tranforms/objectShorthand';
+import objectShorthand from 'babel-plugin-5to6-obj-shorthand';
 import commonjsToImport from './tranforms/commonjsToImport';
-import removeUseStrict from './tranforms/removeUseStrict.js';
+import removeUseStrict from 'babel-plugin-5to6-no-strict';
 
 const usage = commander
   .version('0.0.1')
