@@ -4,6 +4,8 @@ import readStdin from './readStdin';
 import recast from 'recast';
 import * as babel from 'babel-core';
 import objectShorthand from './tranforms/objectShorthand';
+import commonjsToImport from './tranforms/commonjsToImport';
+import removeUseStrict from './tranforms/removeUseStrict.js';
 
 const usage = commander
   .version('0.0.1')
@@ -19,6 +21,14 @@ const transforms = {
   'obj-shorthand': {
     description: '{a:a} => {a}',
     plugin: objectShorthand
+  },
+  'no-strict': {
+    description: '"use strict"; => (nothing!)',
+    plugin: removeUseStrict
+  },
+  commonjs: {
+    description: 'var a = require("./b"); => import a from "b";',
+    plugin: commonjsToImport
   }
 };
 
@@ -39,8 +49,11 @@ export default function cli(argv) {
 
   process.stdout.write(
     babel.transform(code, {
+      sourceType: 'module',
       parserOpts: {
         parser: recast.parse,
+        allowImportExportEverywhere: false,
+        allowReturnOutsideFunction: false,
         plugins: [
           'asyncGenerators',
           'classConstructorCall',
@@ -54,10 +67,21 @@ export default function cli(argv) {
           'jsx',
           'objectRestSpread',
           'dynamicImport',
-        ],
+        ]
       },
       generatorOpts: {
-        generator: recast.print,
+        generator: function (...args) {
+          // Forces recast to reprint _everything_; maybe a bit
+          // dangerous/unperformance, but needs to be here or recast
+          // will throw an exception (TODO: still trying to isolate a
+          // minimal reproduction of this)
+          delete args[0].tokens;
+
+          // Print AST
+//          console.log(require('util').inspect(args[0], {depth: null}));
+
+          return recast.print(...args);
+        }
       },
       plugins
     }).code
