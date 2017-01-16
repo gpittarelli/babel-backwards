@@ -4,8 +4,8 @@
   "description": "Babel plugin to remove \"use strict\"; directives",
   "main": "lib/index.js",
   "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-plugin-5to6-no-strict",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": ">=4"
   },
   "keywords": [
     "babel",

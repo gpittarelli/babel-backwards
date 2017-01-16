@@ -1,13 +1,14 @@
 {
-  "private": true,
+  "name": "babel-backwards",
+  "version": "0.0.1",
   "description": "Upgrade ES5 to newer language features; lebab but with babel",
-  "scripts": {
-    "clean": "make clean",
-    "build": "make build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-backwards",
+  "main": "lib/cli.js",
   "engines": {
     "node": ">=4"
+  },
+  "bin": {
+    "babel-backwards": "./bin/babel-backwards"
   },
   "keywords": [
     "babel",
@@ -25,16 +26,7 @@
   "dependencies": {
     "babel-core": "6.21.0",
     "babel-polyfill": "6.20.0",
-    "babel-preset-stage-1": "6.16.0",
     "babel-template": "6.16.0",
     "recast": "0.11.18"
-  },
-  "devDependencies": {
-    "babel-cli": "6.18.0",
-    "babel-plugin-add-module-exports": "0.2.1",
-    "babel-preset-latest": "6.16.0",
-    "babel-preset-stage-3": "6.17.0",
-    "lerna": "2.0.0-beta.32",
-    "rimraf": "2.5.4"
   }
 }
