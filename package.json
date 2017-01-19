@@ -4,6 +4,8 @@
   "scripts": {
     "clean": "make clean",
     "build": "make build",
+    "lint": "make lint",
+    "lint:fix": "make lint-fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -32,6 +34,17 @@
       "transform-flow-strip-types"
     ]
   },
+  "eslintConfig": {
+    "extends": "babel",
+    "rules": {
+      "quotes": ["error", "single"],
+      "object-curly-spacing": ["error", "never"]
+    },
+    "env": {
+      "node": true,
+      "mocha": true
+    }
+  },
   "dependencies": {
     "babel-core": "6.21.0",
     "babel-polyfill": "6.20.0",
@@ -41,10 +54,15 @@
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
+    "babel-eslint": "7.1.1",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-transform-flow-strip-types": "6.21.0",
     "babel-preset-latest": "6.16.0",
     "babel-preset-stage-3": "6.17.0",
+    "eslint": "3.13.1",
+    "eslint-config-babel": "6.0.0",
+    "eslint-plugin-flowtype": "2.30.0",
+    "flow-bin": "0.38.0",
     "lerna": "2.0.0-beta.32",
     "rimraf": "2.5.4"
   }

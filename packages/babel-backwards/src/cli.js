@@ -9,7 +9,7 @@ import removeUseStrict from 'babel-plugin-5to6-no-strict';
 
 const usage = commander
   .version('0.0.1')
-  .usage(`[options] [file]`)
+  .usage('[options] [file]')
   .option(
     '-t, --transform <transform>',
     'Transforms to apply. Can specify multiple.',
@@ -34,12 +34,12 @@ const transforms = {
 
 export default function cli(argv: String[]) {
   const {
-    args: [file='-'],
+    args: [file = '-'],
     transform: desiredTransforms
   } = usage.parse(argv);
 
   const code = file === '-' ? readStdin() : fs.readFileSync(file),
-    plugins = desiredTransforms.map(name => {
+    plugins = desiredTransforms.map((name) => {
       if (transforms[name]) {
         return transforms[name].plugin;
       } else {
