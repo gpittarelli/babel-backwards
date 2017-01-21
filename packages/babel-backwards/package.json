@@ -1,6 +1,6 @@
 {
   "name": "babel-backwards",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Upgrade ES5 to newer language features; lebab but with babel",
   "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-backwards",
   "main": "lib/cli.js",
