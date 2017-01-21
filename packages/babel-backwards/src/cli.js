@@ -43,7 +43,16 @@ export default function cli(argv: String[]) {
       if (transforms[name]) {
         return transforms[name].plugin;
       } else {
-        console.warn(`Unknown transform: "${name}", skipping.`);
+        let plugin;
+        try {
+          plugin = require(`babel-plugin-${name}`);
+        } catch (e) {}
+
+        if (plugin) {
+          return plugin;
+        } else {
+          console.warn(`Unknown transform: "${name}", skipping.`);
+        }
       }
     }).filter(Boolean);
 
