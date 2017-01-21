@@ -13,6 +13,12 @@ build: clean
 		babel -d $$f/lib $$f/src; \
 	done
 
+watch: clean
+	@for f in packages/*; do \
+		babel -w -d $$f/lib $$f/src & \
+	done; \
+	wait
+
 lint:
 	@eslint 'packages/*/src/**.js'
 

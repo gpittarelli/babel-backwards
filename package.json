@@ -4,6 +4,7 @@
   "scripts": {
     "clean": "make clean",
     "build": "make build",
+    "watch": "make watch",
     "lint": "make lint",
     "lint:fix": "make lint-fix",
     "test": "echo \"Error: no test specified\" && exit 1"
