@@ -30,3 +30,6 @@ lint-fix:
 
 test:
 	@mocha runtests.js
+
+publish: build
+	@lerna publish
