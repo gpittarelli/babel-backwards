@@ -7,7 +7,7 @@ import readStdin from './readStdin';
 import recast from 'recast';
 import * as babel from 'babel-core';
 import objectShorthand from 'babel-plugin-5to6-obj-shorthand';
-import commonjsToImport from './tranforms/commonjsToImport';
+import commonjsToImport from 'babel-plugin-5to6-commonjs-to-import';
 import removeUseStrict from 'babel-plugin-5to6-no-strict';
 
 const usage = commander
