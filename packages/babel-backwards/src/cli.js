@@ -32,13 +32,60 @@ const transforms = {
   }
 };
 
+const defaultBabelOpts = {
+  sourceType: 'module',
+  babelrc: false,
+  parserOpts: {
+    parser: recast.parse,
+    allowImportExportEverywhere: false,
+    allowReturnOutsideFunction: false,
+    plugins: [
+      'asyncGenerators',
+      'classConstructorCall',
+      'classProperties',
+      'decorators',
+      'doExpressions',
+      'exportExtensions',
+      'flow',
+      'functionSent',
+      'functionBind',
+      'jsx',
+      'objectRestSpread',
+      'dynamicImport',
+    ]
+  },
+  generatorOpts: {
+    generator: function (...args) {
+      // Forces recast to reprint _everything_; maybe a bit
+      // dangerous/unperformant, but needs to be here or recast
+      // will throw an exception (TODO: still trying to isolate a
+      // minimal reproduction of this)
+      delete args[0].tokens;
+
+      // Print AST
+      //console.log(require('util').inspect(args[0], {depth: null}));
+
+      return recast.print(...args);
+    }
+  }
+};
+
+// From babel-cli:
+function toErrorStack(err) {
+  if (err._babel && err instanceof SyntaxError) {
+    return `${err.name}: ${err.message}\n${err.codeFrame}`;
+  } else {
+    return err.stack;
+  }
+}
+
 export default function cli(argv: String[]) {
   const {
-    args: [file = '-'],
-    transform: desiredTransforms
+    args: [filename = '-'],
+    transform: desiredTransforms = []
   } = usage.parse(argv);
 
-  const code = file === '-' ? readStdin() : fs.readFileSync(file),
+  const code = filename === '-' ? readStdin() : fs.readFileSync(filename),
     plugins = desiredTransforms.map((name) => {
       if (transforms[name]) {
         return transforms[name].plugin;
@@ -56,43 +103,15 @@ export default function cli(argv: String[]) {
       }
     }).filter(Boolean);
 
-  process.stdout.write(
-    babel.transform(code, {
-      sourceType: 'module',
-      parserOpts: {
-        parser: recast.parse,
-        allowImportExportEverywhere: false,
-        allowReturnOutsideFunction: false,
-        plugins: [
-          'asyncGenerators',
-          'classConstructorCall',
-          'classProperties',
-          'decorators',
-          'doExpressions',
-          'exportExtensions',
-          'flow',
-          'functionSent',
-          'functionBind',
-          'jsx',
-          'objectRestSpread',
-          'dynamicImport',
-        ]
-      },
-      generatorOpts: {
-        generator: function (...args) {
-          // Forces recast to reprint _everything_; maybe a bit
-          // dangerous/unperformance, but needs to be here or recast
-          // will throw an exception (TODO: still trying to isolate a
-          // minimal reproduction of this)
-          delete args[0].tokens;
+  try {
+    const result = babel.transform(code, {
+      filename,
+      plugins,
+      ...defaultBabelOpts
+    }).code;
 
-          // Print AST
-//          console.log(require('util').inspect(args[0], {depth: null}));
-
-          return recast.print(...args);
-        }
-      },
-      plugins
-    }).code
-  );
+    process.stdout.write(result);
+  } catch (e) {
+    console.error(toErrorStack(e));
+  }
 }
