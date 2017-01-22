@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-5to6-commonjs-to-import",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Babel plugin to switch require calls to imports",
   "main": "lib/index.js",
   "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-plugin-5to6-commonjs-to-import",
