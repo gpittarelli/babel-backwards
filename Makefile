@@ -29,4 +29,4 @@ lint-fix:
 	@eslint --fix 'packages/*/src/**.js'
 
 test:
-	mocha runtests.js
+	@mocha runtests.js
