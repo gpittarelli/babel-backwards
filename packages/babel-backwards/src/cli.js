@@ -88,6 +88,21 @@ function toErrorStack(err) {
   }
 }
 
+export function transformFile(filename: String, plugins: String[]): String {
+  const input = filename === '-' ? readStdin() : fs.readFileSync(filename, 'utf8'),
+    output: String = babel.transform(input, {
+      filename,
+      plugins,
+      ...defaultBabelOpts
+    }).code;
+
+  if (input.endsWith('\n') && !output.endsWith('\n')) {
+    return output + '\n';
+  }
+
+  return output;
+}
+
 export default async function cli(argv: String[]) {
   const {
     args: [filename = '-'],
@@ -114,14 +129,7 @@ export default async function cli(argv: String[]) {
 
   try {
     if (!outDir) {
-      const input = filename === '-' ? readStdin() : fs.readFileSync(filename),
-        output = babel.transform(input, {
-          filename,
-          plugins,
-          ...defaultBabelOpts
-        }).code;
-
-      process.stdout.write(output);
+      process.stdout.write(transformFile(filename, plugins));
     } else {
       const stat = fs.statSync(filename);
 
@@ -140,14 +148,7 @@ export default async function cli(argv: String[]) {
 
           console.log(`${src} -> ${dest}`);
 
-          const input = fs.readFileSync(src),
-            output = babel.transform(input, {
-              filename: src,
-              plugins,
-              ...defaultBabelOpts
-            }).code;
-
-          fs.writeFileSync(dest, output);
+          fs.writeFileSync(dest, transformFile(src, plugins));
         });
       }
     }
