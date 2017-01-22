@@ -26,3 +26,23 @@ https://github.com/lebab/lebab/issues/138)
 
 Many thanks to [hzoo](https://github.com/hzoo) for making this
 possible (see https://github.com/lebab/lebab/issues/138)
+
+## Usage
+
+    npm i -g babel-backwards
+    echo '"use strict";1 + 1;' | babel-backwards -t no-strict
+    # => 1 + 1;
+
+## Development
+
+    git clone https://github.com/gpittarelli/babel-backwards
+    npm i
+    npm run bootstrap
+    npm watch &
+    ./packages/babel-backwards/bin/babel-backwards --help
+
+## License
+
+Released under the MIT License. See the LICENSE file for full text
+
+Copyright © 2017 George Pittarelli
