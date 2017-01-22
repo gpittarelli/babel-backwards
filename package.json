@@ -8,7 +8,7 @@
     "lint": "make lint",
     "lint:fix": "make lint-fix",
     "bootstrap": "lerna bootstrap",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha runtests"
   },
   "engines": {
     "node": ">=4"
@@ -39,8 +39,14 @@
   "eslintConfig": {
     "extends": "babel",
     "rules": {
-      "quotes": ["error", "single"],
-      "object-curly-spacing": ["error", "never"]
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "never"
+      ]
     },
     "env": {
       "node": true,
@@ -54,11 +60,14 @@
     "babel-plugin-transform-flow-strip-types": "6.21.0",
     "babel-preset-latest": "6.16.0",
     "babel-preset-stage-3": "6.17.0",
+    "chai": "3.5.0",
     "eslint": "3.13.1",
     "eslint-config-babel": "6.0.0",
     "eslint-plugin-flowtype": "2.30.0",
     "flow-bin": "0.38.0",
+    "glob": "7.1.1",
     "lerna": "2.0.0-beta.32",
+    "mocha": "3.2.0",
     "rimraf": "2.5.4"
   }
 }
