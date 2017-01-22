@@ -1,5 +1,8 @@
 import commander from 'commander';
 import fs from 'fs';
+import path from 'path';
+import glob from 'glob';
+import {sync as mkdirpSync} from 'mkdirp';
 import readStdin from './readStdin';
 import recast from 'recast';
 import * as babel from 'babel-core';
@@ -9,10 +12,16 @@ import removeUseStrict from 'babel-plugin-5to6-no-strict';
 
 const usage = commander
   .version('0.0.1')
-  .usage('[options] [file]')
+  .usage('[options] [file|indir]')
+  .description(
+ `Transforms infile with the transforms specified by -t. If -d is
+  specified, reads all files from indir and transforms them into files
+  in outdir.`
+  )
+  .option('-d, --out-dir <output directory>', 'Transform entire directory.')
   .option(
     '-t, --transform <transform>',
-    'Transforms to apply. Can specify multiple.',
+    'Transform to apply. Can appear multiple times.',
     (val, acc) => acc.concat(val),
     []
   );
@@ -79,38 +88,69 @@ function toErrorStack(err) {
   }
 }
 
-export default function cli(argv: String[]) {
+export default async function cli(argv: String[]) {
   const {
     args: [filename = '-'],
-    transform: desiredTransforms = []
+    transform: desiredTransforms = [],
+    outDir
   } = usage.parse(argv);
 
-  const code = filename === '-' ? readStdin() : fs.readFileSync(filename),
-    plugins = desiredTransforms.map((name) => {
-      if (transforms[name]) {
-        return transforms[name].plugin;
-      } else {
-        let plugin;
-        try {
-          plugin = require(`babel-plugin-${name}`);
-        } catch (e) {}
+  const plugins = desiredTransforms.map((name) => {
+    if (transforms[name]) {
+      return transforms[name].plugin;
+    } else {
+      let plugin;
+      try {
+        plugin = require(`babel-plugin-${name}`);
+      } catch (e) {}
 
-        if (plugin) {
-          return plugin;
-        } else {
-          console.warn(`Unknown transform: "${name}", skipping.`);
-        }
+      if (plugin) {
+        return plugin;
+      } else {
+        console.warn(`Unknown transform: "${name}", skipping.`);
       }
-    }).filter(Boolean);
+    }
+  }).filter(Boolean);
 
   try {
-    const result = babel.transform(code, {
-      filename,
-      plugins,
-      ...defaultBabelOpts
-    }).code;
+    if (!outDir) {
+      const input = filename === '-' ? readStdin() : fs.readFileSync(filename),
+        output = babel.transform(input, {
+          filename,
+          plugins,
+          ...defaultBabelOpts
+        }).code;
 
-    process.stdout.write(result);
+      process.stdout.write(output);
+    } else {
+      const stat = fs.statSync(filename);
+
+      if (stat.isDirectory(filename)) {
+        const dirname = filename;
+
+        const files = glob.sync('./**.@(js|jsx)', {
+          cwd: dirname
+        });
+
+        files.forEach(function (filename) {
+          const src = path.join(dirname, filename),
+            dest = path.join(outDir, filename);
+
+          mkdirpSync(path.dirname(dest));
+
+          console.log(`${src} -> ${dest}`);
+
+          const input = fs.readFileSync(src),
+            output = babel.transform(input, {
+              filename: src,
+              plugins,
+              ...defaultBabelOpts
+            }).code;
+
+          fs.writeFileSync(dest, output);
+        });
+      }
+    }
   } catch (e) {
     console.error(toErrorStack(e));
   }
