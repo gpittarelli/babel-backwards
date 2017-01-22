@@ -8,6 +8,9 @@ export PATH := $(shell pwd)/node_modules/.bin:$(PATH)
 clean:
 	@rm -rf packages/*/lib
 
+clean-deps:
+	@rm -rf packages/*/lib packages/*/node_modules node_modules
+
 build: clean
 	@for f in packages/*; do \
 		babel -d $$f/lib $$f/src; \
