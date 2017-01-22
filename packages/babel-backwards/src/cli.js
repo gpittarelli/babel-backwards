@@ -9,9 +9,10 @@ import * as babel from 'babel-core';
 import objectShorthand from 'babel-plugin-5to6-obj-shorthand';
 import commonjsToImport from 'babel-plugin-5to6-commonjs-to-import';
 import removeUseStrict from 'babel-plugin-5to6-no-strict';
+import {version} from '../package.json';
 
 const usage = commander
-  .version('0.0.1')
+  .version(version)
   .usage('[options] [file|indir]')
   .description(
  `Transforms infile with the transforms specified by -t. If -d is
