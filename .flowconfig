@@ -8,6 +8,7 @@ packages/*/src
 [libs]
 
 [options]
+module.ignore_non_literal_requires=true
 strip_root=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
