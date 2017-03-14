@@ -126,8 +126,8 @@ function coerceToImport(id, init) {
     if (bindingsMaybe === null) {
       return null;
     }
-    const bindings = Object.entries(bindingsMaybe).map(([binding, path]) => (
-      [binding, importPath.concat(path)]
+    const bindings = Object.keys(bindingsMaybe).map((binding) => (
+      [binding, importPath.concat(bindingsMaybe[binding])]
     ));
 
     const {direct = [], deep = []} = groupBy(bindings, ([, path]) => {
