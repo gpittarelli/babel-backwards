@@ -1,5 +1,5 @@
 import * as t from 'babel-types';
-import {groupBy} from 'lodash';
+import {groupBy, toPairs, values} from 'lodash';
 
 // 'require("b").e.f.g' => {literal: stringLiteral('b'), path: ['e', 'f', 'g']}
 // also handles require()s without property lookups.
@@ -49,7 +49,7 @@ function destructureToPaths(node) {
         return null;
       }
 
-      const subPaths = Object.values(children);
+      const subPaths = values(children);
       if (subPaths.some((x) => x === null)) {
         return null;
       }
@@ -71,7 +71,7 @@ function destructureToPaths(node) {
           return null;
         }
 
-        const subPaths = Object.values(children);
+        const subPaths = values(children);
         if (subPaths.some((x) => x === null)) {
           return null;
         }
@@ -126,7 +126,7 @@ function coerceToImport(id, init) {
     if (bindingsMaybe === null) {
       return null;
     }
-    const bindings = Object.entries(bindingsMaybe).map(([binding, path]) => (
+    const bindings = toPairs(bindingsMaybe).map(([binding, path]) => (
       [binding, importPath.concat(path)]
     ));
 
