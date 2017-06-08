@@ -24,15 +24,15 @@
   "author": "George Pittarelli",
   "license": "MIT",
   "dependencies": {
-    "babel-core": "6.21.0",
+    "babel-core": "6.25.0",
+    "babel-plugin-5to6-commonjs-to-import": "^0.0.5",
     "babel-plugin-5to6-no-strict": "^0.0.4",
     "babel-plugin-5to6-obj-shorthand": "^0.0.3",
-    "babel-plugin-5to6-commonjs-to-import": "^0.0.5",
-    "babel-polyfill": "6.20.0",
-    "babel-template": "6.16.0",
+    "babel-polyfill": "6.23.0",
+    "babel-template": "6.25.0",
     "commander": "2.9.0",
-    "glob": "7.1.1",
+    "glob": "7.1.2",
     "mkdirp": "0.5.1",
-    "recast": "0.11.18"
+    "recast": "0.12.5"
   }
 }
