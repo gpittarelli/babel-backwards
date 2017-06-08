@@ -137,7 +137,7 @@ export default async function cli(argv: String[]) {
       if (stat.isDirectory(filename)) {
         const dirname = filename;
 
-        const files = glob.sync('./**.@(js|jsx)', {
+        const files = glob.sync('./**/*.@(js|jsx)', {
           cwd: dirname
         });
 
