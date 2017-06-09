@@ -1,15 +1,31 @@
 import * as t from 'babel-types';
 import {groupBy, toPairs, values} from 'lodash';
 
-// 'require("b").e.f.g' => {literal: stringLiteral('b'), path: ['e', 'f', 'g']}
-// also handles require()s without property lookups.
+// 'require("b")("c")("d").e.f.g' => {
+//    literal: stringLiteral('b'),
+//    path: ['e', 'f', 'g'],
+//    calls: [[t.stringLiteral("c")], [t.stringLiteral("d")]]
+// }
+//
+// also handles require()s without property lookups or immediate calls.
 // returns null if node is not a require call
 function matchNestedRequire(node) {
-  if (t.isCallExpression(node) &&
-      t.isIdentifier(node.callee, {name: 'require'}) &&
-      node.arguments.length === 1 &&
-      t.isStringLiteral(node.arguments[0])) {
-    return {literal: node.arguments[0], path: []};
+  if (t.isCallExpression(node)) {
+    if (t.isIdentifier(node.callee, {name: 'require'}) &&
+        node.arguments.length === 1 &&
+        t.isStringLiteral(node.arguments[0])) {
+      return {literal: node.arguments[0], path: [], calls: []};
+    } else if (t.isCallExpression(node.callee)) {
+      const child = matchNestedRequire(node.callee);
+      if (child === null) {
+        return null;
+      }
+
+      child.calls.push(node.arguments);
+      return child;
+    } else {
+      return null;
+    }
   } else if (t.isMemberExpression(node)) {
     const child = matchNestedRequire(node.object);
     if (child === null) {
@@ -93,15 +109,44 @@ function destructureToPaths(node) {
 }
 
 
-function coerceToImport(id, init) {
+function coerceToImport(id, init, kind, path) {
   // 'var foo = require("bar")' => 'import foo from "bar"'
   const requireInfo = matchNestedRequire(init);
   if (requireInfo === null) {
     return null;
   }
-  const {literal: importLiteral, path: importPath} = requireInfo;
+  const {
+    literal: importLiteral,
+    path: importPath,
+    calls: importCalls
+  } = requireInfo;
 
   if (t.isIdentifier(id)) {
+    if (importCalls.length > 0) {
+      // handle 'var a = require("b")("c")' cases. Currently doesn't
+      // work with any of the other fancy case handling (eg nested
+      // lookups, etc).
+      if (importPath.length !== 0) {
+        return null;
+      }
+
+      // TODO: deeper immediate calls
+      if (importCalls.lenght > 1) {
+        return null;
+      }
+
+      const importId = path.scope.generateUidIdentifier(id.name);
+      return [
+        t.importDeclaration([t.importDefaultSpecifier(importId)], importLiteral),
+        t.variableDeclaration(kind, [
+          t.variableDeclarator(
+            t.identifier(id.name),
+            t.callExpression(importId, importCalls[0])
+          )
+        ])
+      ];
+    }
+
     if (importPath.length === 0) {
       // simple 'var x = require("b")' case
       return t.importDeclaration(
@@ -122,6 +167,7 @@ function coerceToImport(id, init) {
       return null;
     }
   } else if (t.isPattern(id)) {
+    // 'var {a: {b: c}} = require("d").e.f;'
     const bindingsMaybe = destructureToPaths(id);
     if (bindingsMaybe === null) {
       return null;
@@ -159,7 +205,7 @@ export default function commonjsToImport() {
         let anyNewImports = false;
         const newNodes =
           node.declarations.map(({...decl, id, init}) => {
-            const newImport = coerceToImport(id, init);
+            const newImport = coerceToImport(id, init, node.kind, path);
             if (newImport) {
               anyNewImports = true;
               return newImport;
