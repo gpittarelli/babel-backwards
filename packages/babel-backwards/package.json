@@ -1,6 +1,6 @@
 {
   "name": "babel-backwards",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Upgrade ES5 to newer language features; lebab but with babel",
   "repository": "https://github.com/gpittarelli/babel-backwards/tree/master/packages/babel-backwards",
   "main": "lib/cli.js",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "6.25.0",
-    "babel-plugin-5to6-commonjs-to-import": "^0.0.5",
+    "babel-plugin-5to6-commonjs-to-import": "^0.0.6",
     "babel-plugin-5to6-no-strict": "^0.0.4",
     "babel-plugin-5to6-obj-shorthand": "^0.0.3",
     "babel-polyfill": "6.23.0",
