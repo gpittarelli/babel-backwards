@@ -1,7 +1,5 @@
 # babel-backwards
 
-TODO: (maybe babel-5to6 is a better name?)
-
 Babel port of [lebab](https://github.com/lebab/lebab)--a project for
 transforming ES5 code to use features introduced in ES2015 and beyond.
 
@@ -20,8 +18,8 @@ https://github.com/lebab/lebab/issues/138)
    worked out, allowing the actual transforms to just be implemented
    by themselves.
  - lebab is based on the espree JS parser, which doesn't support as
-   many features as babylon; so it doens't support the (admittedly
-   awkward case) of upgrading files that already use some experimental
+   many features as babylon; so it doesn't support the (admittedly
+   awkward) case of upgrading files that already use some experimental
    features.
 
 Many thanks to [hzoo](https://github.com/hzoo) for making this
